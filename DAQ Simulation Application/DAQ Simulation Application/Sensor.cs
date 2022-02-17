@@ -11,7 +11,6 @@ namespace DAQ_Simulation_Application
         double dVal;
         int sVal;
         int sId;
-        bool analog; //Tried Separately But Failed 
         Random rSensorValue;
 
         public Sensor(int id)
@@ -27,7 +26,7 @@ namespace DAQ_Simulation_Application
 
         public int getSensorID ()
         {
-            return sId;
+            return sVal;
         }
         public double GetValueAnalog()
         {
@@ -39,13 +38,9 @@ namespace DAQ_Simulation_Application
         public double GetValueDigital()
         {
 
-            sVal += rSensorValue.Next(0,1);
-            return sVal;
+            sId += rSensorValue.Next(0,1);
+            return sId;
         }
-
-
-
- 
 
 
         

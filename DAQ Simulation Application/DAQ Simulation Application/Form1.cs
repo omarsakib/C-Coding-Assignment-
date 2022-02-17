@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,8 +18,8 @@ namespace DAQ_Simulation_Application
         List<string> ListValue = new List<string>();
         string[] AnalogValue = new string[3];
         string[] DigitalValue = new string[1];
-
-        string AnalogText, DigitalText;
+        string AnalogText;
+        string DigitalText;
         int maximumSensorID = 4;
         int ctr;
 
@@ -46,50 +46,59 @@ namespace DAQ_Simulation_Application
 
         private void btnSampling_Click(object sender, EventArgs e)
         {
-
+            
             tmrSampling.Start();
             txtSamplingTime.Text = time + "seconds";
 
 
 
         }
-        double time = 5.4;
+        double time = 0;
 
         private void tmrSampling_Tick(object sender, EventArgs e)
         {
-            if (time > 0.0)
+            if (time > 55)
             {
-                time = time - 1;
-                txtSamplingTime.Text = time + "seconds";
+                time = time + 1;
+                txtSamplingTime.Text = time/10 + "seconds";
             }
             else
             {
                 tmrSampling.Stop();
-                txtSamplingTime.Text = "sampling";
 
-                txtFinalValue.AppendText("ALL Analog Sensor Value: ");
-                for (ctr = 0; ctr < 4; ctr++)
+                txtSamplingTime.Text = "Sampled After 5.4 Sec";
+                txtFinalValue.AppendText("Analog Sensor Value: ");
+
+                for (ctr = 0; ctr < 3; ctr++)
                 {
                     AnalogText = SensorObject[ctr].GetValueAnalog().ToString("F10");
                     txtFinalValue.AppendText(AnalogText + ",");
+
                     AnalogValue[ctr] = AnalogText;
                 }
                 string ListStringValues = string.Join(",", AnalogValue);
+
                 ListValue.Add(ListStringValues);
-                txtFinalValue.AppendText("ALL Digital Sensors Value: ");
+                txtFinalValue.AppendText("Digital Sensors Value: ");
+
+
                 for (ctr = 3; ctr < maximumSensorID; ctr++)
                 {
+
                     DigitalText = SensorObject[ctr].GetValueDigital().ToString();
                     txtFinalValue.AppendText(DigitalText + ", ");
+
                     DigitalValue[ctr - 3] = DigitalText;
                 }
                 string DigitalListValues = string.Join(",", DigitalValue);
                 string DateTime = string.Join("", timedate);
-                ListValue.Add(DigitalListValues);
                 ListValue.Add(DateTime);
+                ListValue.Add(DigitalListValues);
+                
 
             }
         }
+        
 
         
 
@@ -97,25 +106,26 @@ namespace DAQ_Simulation_Application
         {
 
             tmrLogging.Start();
-            circle_time = 36;
+            circle_time = 0;
             txtLogging.Text=circle_time + " seconds";
 
 
         }
-        int circle_time = 36;
+        int circle_time = 0;
         private void tmrLogging_Tick(object sender, EventArgs e)
         {
-            if (circle_time > 0.0)
+            if (circle_time > 61)
             {
-                circle_time = circle_time - 1;
-                txtLogging.Text = circle_time + " seconds";
+                circle_time = circle_time + 1;
+                txtLogging.Text = circle_time/10 + " seconds";
             }
             else
             {
                 tmrLogging.Stop();
-                txtLogging.Text = "Logging";
-                string filepath = @"D:\Assignment\AssignmentData.csv";
+                txtLogging.Text = "Logged After 6 Sec";
+                string filepath = @"D:\Assignment\Assignment_Result.csv";
                 File.AppendAllLines(filepath, ListValue);
+                txtFinalValue.Text = "Assignment Result SAVED!  ";
 
             }
 
